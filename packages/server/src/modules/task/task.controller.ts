@@ -1,15 +1,14 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { TaskService } from "./task.service";
-import { CreateTaskInputProps } from "./task.schema";
+import { CreateTaskInputType } from "./task.schema";
 
 
-export const createTaskHandler = async (request: FastifyRequest<{Body: CreateTaskInputProps}>, reply: FastifyReply) =>  {
+
+export const createTaskHandler = async (request: FastifyRequest<{Body: CreateTaskInputType}>, reply: FastifyReply) =>  {
     const taskService = new TaskService();
-    
-    const body = request.body;
 
     try {
-        const newTask = await taskService.createTask(body);
+        const newTask = await taskService.createTask(request.body);
 
         return reply.status(201).send(newTask);
     } catch (error) {
