@@ -3,19 +3,20 @@
       "target": "es6",                                  
       "module": "commonjs",                             
       "strict": true,                                
-      "esModuleInterop": true,       
+      "esModuleInterop": true,   
+      "moduleResolution": "Node",    
       "skipLibCheck": true,                              
       "forceConsistentCasingInFileNames": true,        
-      "outDir": "./dist",                               
-      "rootDir": "./src",                               
-      "baseUrl": "./",
+      "outDir": "./dist",                                                            
+      "baseUrl": ".",
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,                            
       "paths": {
-        "@app/*": ["src/*"]                              
+        "@app/*": ["src/*"],
+        "@shared/*": ["packages/shared/*"]                             
       }
     },
-    "include": ["src/**/*"],                       
+    "include": ["packages/*/src/**/*"],                       
     "exclude": ["node_modules", "dist"]     
   }
   
