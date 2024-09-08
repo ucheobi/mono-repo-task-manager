@@ -9,9 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_controller_1 = require("./user.controller");
-const userRoutes = (fastify) => __awaiter(void 0, void 0, void 0, function* () {
-    fastify.post("/register-user", user_controller_1.signUpHandler);
-    fastify.post("/signin", user_controller_1.signInHandler);
+const task_controller_1 = require("./task.controller");
+const taskRoutes = (fastify) => __awaiter(void 0, void 0, void 0, function* () {
+    fastify.post("/create-task", task_controller_1.createTaskHandler);
 });
-exports.default = userRoutes;
+exports.default = taskRoutes;

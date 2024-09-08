@@ -1,8 +1,9 @@
 import { FastifyInstance } from "fastify";
-import { createUserHandler } from "./user.controller";
+import { signUpHandler, signInHandler } from "./user.controller";
 
 const userRoutes = async (fastify: FastifyInstance) => {
-    fastify.post("/create-user", createUserHandler)
+    fastify.post("/register-user", signUpHandler);
+    fastify.post("/signin", signInHandler);
 }
 
 export default userRoutes;

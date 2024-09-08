@@ -1,23 +1,25 @@
 import { z } from "zod";
 
-const CreateUser = {
+const BaseAccount = {
     email: z.string({
         required_error: "Email is required"
     }),
     username: z.string(),
-    password: z.string({
-        required_error: "Password is required"
-    })
 }
 
-export const CreateUserSchema = z.object({
-    ...CreateUser
+export const CreateAccountSchema = z.object({
+    ...BaseAccount,
+    password: z.string().min(6),
 });
 
-export const CreateUserResponseSchema = z.object({
+export const AccountResponseSchema = z.object({
     id: z.number(),
-    ...CreateUser
+    password: z.string(),
+    ...BaseAccount
 })
 
-export type CreateUserInputType = z.infer<typeof CreateUserSchema>;
-export type CreateUserResponseType = z.infer<typeof CreateUserResponseSchema>;
+export const SignInInput = CreateAccountSchema.pick({ email: true, password: true });
+
+export type CreateAccountInputType = z.infer<typeof CreateAccountSchema>;
+export type AccountResponseType = z.infer<typeof AccountResponseSchema> | null;
+export type SignInInputType = z.infer<typeof SignInInput>;

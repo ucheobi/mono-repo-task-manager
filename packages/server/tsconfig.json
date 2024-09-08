@@ -3,6 +3,7 @@
     "compilerOptions": {
       "outDir": "dist"
     },
-    "include": ["src/**/*"],                         
+    "include": ["src/**/*", "fastify.d.ts"],   
+    "files": ["fastify.d.ts"]                      
   }
   

@@ -1,6 +1,9 @@
-import Fastify from 'fastify';
-import taskRoutes from './modules/task/task.route';
-import userRoutes from './modules/user/user.route';
+import fCookie from "@fastify/cookie";
+import fjwt, { FastifyJWT } from "@fastify/jwt";
+import Fastify, { FastifyReply, FastifyRequest } from "fastify";
+import taskRoutes from "./modules/task/task.route";
+import userRoutes from "./modules/user/user.route";
+
 
 const fastify = Fastify({
   logger: {
@@ -9,6 +12,20 @@ const fastify = Fastify({
     }
   }
 });
+
+fastify.register(fjwt, {
+  secret: "9hQs32aQf017rl8qxfpzl-IkHnzceVFgPD1ejsCecnM"
+});
+
+fastify.addHook('preHandler', (req, res, next) => {
+  req.jwt = fastify.jwt
+  return next()
+});
+
+fastify.register(fCookie, {
+  secret: "jrhhgrgf8493gfgvciohoidc8984efecdgcugqwiucg",
+  hook: "preHandler"
+})
 
 fastify.register(userRoutes, {prefix: "api/users"});
 fastify.register(taskRoutes, { prefix: "api/tasks"});

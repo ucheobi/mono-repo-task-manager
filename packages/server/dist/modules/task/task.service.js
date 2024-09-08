@@ -9,40 +9,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserService = void 0;
+exports.TaskService = void 0;
 const client_1 = require("@prisma/client");
-class UserService {
+class TaskService {
     constructor(prismaClient = new client_1.PrismaClient()) {
         this.prismaClient = prismaClient;
     }
-    createAccount(createUserInput) {
+    createTask(createTaskInput) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, username, password } = createUserInput;
+            console.log(createTaskInput);
             try {
-                const existingUser = yield this.prismaClient.user.findUnique({ where: { email } });
-                if (existingUser) {
-                    throw new Error("User already exist!");
-                }
-                const user = yield this.prismaClient.user.create({
-                    data: {
-                        email,
-                        username,
-                        password
-                    }
+                const task = yield this.prismaClient.task.create({
+                    data: createTaskInput
                 });
-                return user;
+                return task;
             }
             catch (error) {
-                console.error("Unable to create user");
+                console.error("Unable to create task");
                 throw error;
             }
         });
     }
-    findUser(email) {
-        const user = this.prismaClient.user.findUnique({
-            where: { email },
+    disconnect() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.prismaClient.$disconnect();
         });
-        return user;
     }
 }
-exports.UserService = UserService;
+exports.TaskService = TaskService;
