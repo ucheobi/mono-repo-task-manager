@@ -1,9 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import { CreateAccountInputType, AccountResponseType } from "./user.schema";
+import { AccountGetAllResponseType, AccountResponseType, CreateAccountInputType } from "./user.schema";
 
 export interface IUserService {
     createAccount: (createAccountInput: CreateAccountInputType) => Promise<AccountResponseType>;
-    findUser: (email: string) => AccountResponseType
+    findUser: (email: string) => AccountResponseType;
+    getAllUsers: () => Promise<Array<AccountGetAllResponseType>>;
 }
 
 export class UserService implements IUserService {
@@ -40,5 +41,17 @@ export class UserService implements IUserService {
         });
 
         return user as unknown as AccountResponseType;
+    }
+
+    async getAllUsers(): Promise<Array<AccountGetAllResponseType>> {
+        const user = await this.prismaClient.user.findMany({
+            select: {
+                id:  true,
+                email:  true,
+                username:  true, 
+            }
+        })
+
+        return user;
     }
 }
