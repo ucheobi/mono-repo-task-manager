@@ -14,7 +14,7 @@ const fastify = Fastify({
 });
 
 fastify.register(fjwt, {
-  secret: "9hQs32aQf017rl8qxfpzl-IkHnzceVFgPD1ejsCecnM"
+  secret: "9hQs32aQf017rl8qxfpzl-IkHnzceVFgPD1ejsCecnM",
 });
 
 fastify.addHook('preHandler', (req, res, next) => {
@@ -23,7 +23,7 @@ fastify.addHook('preHandler', (req, res, next) => {
 });
 
 fastify.register(fCookie, {
-  secret: "jrhhgrgf8493gfgvciohoidc8984efecdgcugqwiucg",
+  secret: process.env.COOKIE_SECRET,
   hook: "preHandler"
 })
 

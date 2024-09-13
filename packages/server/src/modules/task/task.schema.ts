@@ -24,4 +24,4 @@ const CreateTaskSchema = z.object({
 })
 
 export type CreateTaskInputType = z.infer<typeof CreateTaskSchema>;
-export type CreateTaskResponseSchema = z.infer<typeof CreateTaskResponseSchema>;
+export type CreateTaskResponseType = z.infer<typeof CreateTaskResponseSchema>;
