@@ -1,9 +1,9 @@
 import fCookie from "@fastify/cookie";
-import fjwt, { FastifyJWT } from "@fastify/jwt";
-import Fastify, { FastifyReply, FastifyRequest } from "fastify";
+import fjwt from "@fastify/jwt";
+import Fastify from "fastify";
+import * as dotenv from "dotenv";
 import taskRoutes from "./modules/task/task.route";
 import userRoutes from "./modules/user/user.route";
-
 
 const fastify = Fastify({
   logger: {
@@ -14,7 +14,7 @@ const fastify = Fastify({
 });
 
 fastify.register(fjwt, {
-  secret: "9hQs32aQf017rl8qxfpzl-IkHnzceVFgPD1ejsCecnM",
+  secret: process.env.AUTH_SECRET || "notasecretanymore",
 });
 
 fastify.addHook('preHandler', (req, res, next) => {

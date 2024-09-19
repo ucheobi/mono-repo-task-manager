@@ -1,27 +1,27 @@
 import { z } from "zod";
 
-const CreateTask = {
+const Task = {
     title: z.string({
         required_error: "Title is required to create a task",
         invalid_type_error: "Title must be a string"
     }),
     description: z.string(), 
     userId: z.number(),
-    status: z.string()
+    status: z.enum(["todo", "in_progress", "done"]).default("todo")
 }
 
-const CreateTaskPartialResponse = {
+const TaskPartialResponse = {
     id: z.number(),
 }
 
-const CreateTaskResponseSchema = z.object({
-    ...CreateTaskPartialResponse,
-    ...CreateTask,
+const TaskResponseSchema = z.object({
+    ...TaskPartialResponse,
+    ...Task,
 })
 
-const CreateTaskSchema = z.object({
-    ...CreateTask
+const TaskSchema = z.object({
+    ...Task
 })
 
-export type CreateTaskInputType = z.infer<typeof CreateTaskSchema>;
-export type CreateTaskResponseType = z.infer<typeof CreateTaskResponseSchema>;
+export type TaskInputType = z.infer<typeof TaskSchema>;
+export type TaskResponseType = z.infer<typeof TaskResponseSchema>;

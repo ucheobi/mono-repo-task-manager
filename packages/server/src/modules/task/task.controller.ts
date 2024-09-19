@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { TaskService } from "./task.service";
-import { CreateTaskInputType } from "./task.schema";
+import { TaskInputType } from "./task.schema";
 
 const taskService = new TaskService();
 
-export const createTaskHandler = async (request: FastifyRequest<{Body: CreateTaskInputType}>, reply: FastifyReply) =>  {
+export const createTaskHandler = async (request: FastifyRequest<{Body: TaskInputType}>, reply: FastifyReply) =>  {
 
     try {
         const newTask = await taskService.createTask(request.body);
@@ -16,11 +16,24 @@ export const createTaskHandler = async (request: FastifyRequest<{Body: CreateTas
     }
 }
 
-export const getAllTasksHandlers = async (request: FastifyRequest, reply: FastifyReply) => {
+export const getTaskHandler = async (request: FastifyRequest<{Params: {id: string}}>, reply: FastifyReply) => {
+    const taskId = parseInt(request.params.id, 10)
+    const task = await taskService.findTask(taskId);
+
+    if(!task) {
+        return reply.status(401).send({
+            message: "This task does not exist!"
+        })
+    }
+
+    return reply.status(200).send({task})
+}
+
+export const getAllTasksHandlers = async (_request: FastifyRequest, reply: FastifyReply) => {
     try {
         const tasks = await taskService.getAllTask();
 
-        return tasks;
+        return reply.status(200).send({tasks});
     } catch (error) {
         console.error("Something went wrong: ", error);
         reply.status(500).send(error);

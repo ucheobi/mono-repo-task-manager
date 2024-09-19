@@ -1,10 +1,11 @@
 import { FastifyInstance } from "fastify";
-import { createTaskHandler, getAllTasksHandlers } from "./task.controller";
+import { createTaskHandler, getAllTasksHandlers, getTaskHandler } from "./task.controller";
 
 const taskRoutes = async (fastify: FastifyInstance) => {
-    fastify
-        .post("/create-task", createTaskHandler)
-        .get("/get-all-tasks", getAllTasksHandlers)
+    
+    fastify.post("/create-task", await createTaskHandler)
+    fastify.get("/all-tasks", await getAllTasksHandlers)
+    fastify.get("/task/:id", await getTaskHandler)
 }
 
 export default taskRoutes;

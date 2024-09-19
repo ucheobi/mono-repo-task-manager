@@ -1,21 +1,28 @@
-import { PrismaClient } from "@prisma/client";
-import { CreateTaskInputType, CreateTaskResponseType } from "./task.schema";
+import { PrismaClient, Status } from "@prisma/client";
+import { TaskInputType, TaskResponseType } from "./task.schema";
 
 export interface ITaskService {
-    createTask: (createTaskInput: CreateTaskInputType) => Promise<CreateTaskResponseType>;
-    getAllTask: () => Promise<CreateTaskResponseType[]>
+    createTask: (createTaskInput: TaskInputType) => Promise<TaskResponseType>;
+    getAllTask: () => Promise<TaskResponseType[]>;
+    findTask: (id: number) => TaskResponseType | null;
 }
 
 export class TaskService implements ITaskService {
 
     constructor(private prismaClient = new PrismaClient()) {}
 
-    async createTask(createTaskInput: CreateTaskInputType): Promise<CreateTaskResponseType> {
-        console.log(createTaskInput)
+    async createTask(taskInput: TaskInputType): Promise<TaskResponseType> {
+
         try {
             const task = await this.prismaClient.task.create({
-                data: createTaskInput
+                data: {
+                    title: taskInput.title,
+                    description: taskInput.description,
+                    userId: taskInput.userId,
+                    //status: Status.todo
+                }
             })
+            
             return task;
         } catch (error) {
             console.error("Unable to create task")
@@ -23,7 +30,7 @@ export class TaskService implements ITaskService {
         }
     }
 
-    async getAllTask(): Promise<CreateTaskResponseType[]> {
+    async getAllTask(): Promise<TaskResponseType[]> {
         const tasks = await this.prismaClient.task.findMany({
             select: {
                 id: true,
@@ -35,6 +42,14 @@ export class TaskService implements ITaskService {
         });
 
         return tasks;
+    }
+
+    findTask(id: number): TaskResponseType | null {
+        const tasks = this.prismaClient.task.findUnique({
+            where: { id }
+        });
+
+        return tasks as unknown as TaskResponseType;
     }
 
     async disconnect() {

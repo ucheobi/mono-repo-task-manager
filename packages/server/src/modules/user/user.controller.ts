@@ -7,9 +7,10 @@ const userService = new UserService();
 
 export const signUpHandler = async (request: FastifyRequest<{Body: CreateAccountInputType}>, reply: FastifyReply) => {
     
-    const { email,username, password } = request.body;
+    const { email, username, password } = request.body;
 
     const hashedPassword = await hashPassword(password);
+
     try {
         const user = await userService.createAccount({
             email,
@@ -17,7 +18,11 @@ export const signUpHandler = async (request: FastifyRequest<{Body: CreateAccount
             password: hashedPassword
         });
 
-        return reply.status(201).send({ user });
+        return reply.status(201).send({ 
+            id: user?.id,
+            email: user?.email,
+            username: user?.username
+         });
     } catch (error) {
         console.log("An error occured while creating the a new user: ", error);
        return reply.status(500).send(error); 
@@ -56,7 +61,7 @@ export const signInHandler = async (request: FastifyRequest<{Body: SignInInputTy
         path: "/",
         httpOnly: true,
         secure: true,
-        maxAge: 1000 * 60 * 20, // valid for 20 minutes
+        maxAge: 1000 * 60 * 5, // valid for 5 minutes
     });
 
     return { accessToken: token };
